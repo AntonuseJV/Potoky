@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Класс, описывающий покупательскую корзину.
+ */
 
 public class Basket implements Serializable {
 
@@ -48,7 +51,9 @@ public class Basket implements Serializable {
         this.productsCount = productsCount;
     }
 
-
+    /**
+     * Выводит на экран весь ассортимент продуктов для покупки.
+     */
     protected void printListAllProductsForBuy() {
         System.out.println("Список возможных товаров для покупки: ");
         for (int i = 0; i < productsNames.length; i++) {
@@ -56,12 +61,19 @@ public class Basket implements Serializable {
         }
     }
 
-
+    /**
+     * Добавляет кол-во продуктов по номеру.
+     *
+     * @param productNum номер продукта из списка.
+     * @param amount     кол-во продукта из списка.
+     */
     protected void addToCart(int productNum, int amount) {
         productsCount[productNum] += amount;
     }
 
-
+    /**
+     * Выводит на экран покупательскую корзину.
+     */
     protected void printCart() {
         System.out.println("Ваша корзина:");
         int sum = 0;
@@ -78,7 +90,11 @@ public class Basket implements Serializable {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-
+    /**
+     * Сохраняет покупательскую корзину в текстовый файл.
+     *
+     * @param textFile текстовый файл.
+     */
     public void saveTxt(File textFile) {
         try (PrintWriter writer = new PrintWriter(textFile)) {
             for (int pos = 0; pos < productsNames.length; pos++) {
@@ -89,7 +105,12 @@ public class Basket implements Serializable {
         }
     }
 
-
+    /**
+     * Восстанавливает объект корзины из текстового файла, в который ранее она была сохранена.
+     *
+     * @param textFile текстовый файл.
+     * @return покупательская корзина.
+     */
     public static Basket loadFromTxtFile(File textFile) throws IOException {
         Path path = textFile.toPath();
         List<String> basketList = Files.readAllLines(path);
@@ -112,7 +133,11 @@ public class Basket implements Serializable {
         return basket;
     }
 
-
+    /**
+     * Сохраняет покупательскую корзину в файл в бинарном формате.
+     *
+     * @param file файл в бинарном формате.
+     */
     public void saveBin(File file) {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file))) {
             objectOutputStream.writeObject(this);
@@ -121,7 +146,11 @@ public class Basket implements Serializable {
         }
     }
 
-
+    /**
+     * Восстанавливает объект корзины из бинарного файла, в который ранее она была сохранена.
+     *
+     * @param binFile файл в бинарном формате.
+     */
     public static Basket loadFromBinFile(File binFile) throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(binFile))) {
             Basket basket = (Basket) objectInputStream.readObject();
@@ -131,7 +160,11 @@ public class Basket implements Serializable {
         }
     }
 
-
+    /**
+     * Сохраняет объект корзины в формат JSON.
+     *
+     * @param jsonFile файл формата JSON.
+     */
     public void saveJson(File jsonFile) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -141,7 +174,12 @@ public class Basket implements Serializable {
         }
     }
 
-
+    /**
+     * Восстанавливает объект корзины из JSON файла, в который ранее она была сохранена.
+     *
+     * @param jsonFile файл формата JSON.
+     * @throws IOException
+     */
     public static Basket loadFromJsonFile(File jsonFile) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Basket basket = objectMapper.readValue(jsonFile, Basket.class);
